@@ -16,7 +16,9 @@ jobs:
           node-version: latest
           cache: npm
       - run: npm ci
-      - run: echo $USER $MONGODB_NAME
-        env:
+      - env:
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
+        run: |
+          echo $USER $MONGODB_NAME
+        
