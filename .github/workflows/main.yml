@@ -2,17 +2,13 @@ name: Recurrent Job
 
 on:
   workflow_dispatch: null
+  push: null
   schedule:
     - cron: '*/5 * * * *'
 
 jobs:
   main:
     runs-on: ubuntu-latest
-
-    env:
-      MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
-
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -21,3 +17,6 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm start
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
