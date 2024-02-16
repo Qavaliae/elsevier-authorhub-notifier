@@ -1,12 +1,10 @@
+import { ObjectId } from "mongodb"
+
 export interface Store {
-  _id: {
-    $oid: string
-  }
-  priority: {
-    $numberInt: string
-  }
+  _id: ObjectId
+  priority: number
   tracker: string
-  state: State
+  state?: State
   listeners: Listener[]
 }
 
