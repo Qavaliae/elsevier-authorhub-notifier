@@ -1,8 +1,7 @@
 name: Recurrent Job
 
 on:
-  push:
-    branches: ['main']
+  workflow_dispatch: null
   schedule:
     - cron: '*/5 * * * *'
 
