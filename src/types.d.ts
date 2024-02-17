@@ -1,4 +1,4 @@
-import { ObjectId } from "mongodb"
+import { ObjectId } from 'mongodb'
 
 export interface Store {
   _id: ObjectId
@@ -8,16 +8,22 @@ export interface Store {
   listeners: Listener[]
 }
 
-export type Listener = TelegramListener
+export type Listener = TelegramListener | MailListener
 
 export interface BaseListener {
   channel: string
+  enabled: boolean
 }
 
 export interface TelegramListener extends BaseListener {
   channel: 'telegram'
   bot: string
   chatId: string
+}
+
+export interface MailListener extends BaseListener {
+  channel: 'mail'
+  email: string
 }
 
 export interface State {

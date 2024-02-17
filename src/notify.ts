@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { State, StateSummary, Store } from './types'
+import { config } from './config'
+import { mailer } from './utils/mailer'
 
 export const notify = async (store: Store) => {
   if (!store.state) {
@@ -8,7 +10,7 @@ export const notify = async (store: Store) => {
 
   const message = composeMessage(store.state)
 
-  for (const listener of store.listeners) {
+  for (const listener of store.listeners.filter((e) => e.enabled)) {
     switch (listener.channel) {
       case 'telegram':
         const { bot, chatId } = listener
@@ -20,6 +22,24 @@ export const notify = async (store: Store) => {
         })
 
         console.log(`${store._id}: notified via telegram`)
+        break
+
+      case 'mail':
+        const { email } = listener
+
+        await mailer
+          .sendMail({
+            from: {
+              name: 'Elsevier AuthorHub',
+              address: config.mailer.user,
+            },
+            to: email,
+            subject: 'Notification',
+            text: message,
+          })
+          .catch(() => {})
+
+        console.log(`${store._id}: notified via email`)
         break
 
       default:

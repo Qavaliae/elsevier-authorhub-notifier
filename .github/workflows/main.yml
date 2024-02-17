@@ -12,7 +12,7 @@ jobs:
 
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      MONGODB_NAME: ${{ vars.MONGODB_NAME }}
+      MAILER_AUTH: ${{ secrets.MAILER_AUTH }}
 
     steps:
       - uses: actions/checkout@v4
