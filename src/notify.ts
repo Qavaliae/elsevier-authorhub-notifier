@@ -3,7 +3,7 @@ import { State, StateSummary, Store } from './types'
 
 export const notify = async (store: Store) => {
   if (!store.state) {
-    throw new Error('Cannot notify falsy state.')
+    throw new Error(`${store._id}: cannot notify falsy state`)
   }
 
   const message = composeMessage(store.state)
@@ -19,11 +19,11 @@ export const notify = async (store: Store) => {
           text: message,
         })
 
-        console.log('Notified via Telegram.')
+        console.log(`${store._id}: notified via telegram`)
         break
 
       default:
-        console.error('Unsupported channel.')
+        console.error(`${store._id}: unsupported channel`)
         break
     }
   }

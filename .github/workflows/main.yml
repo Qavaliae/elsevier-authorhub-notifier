@@ -12,7 +12,7 @@ jobs:
 
     env:
       MONGODB_URI: ${{ secrets.MONGODB_URI }}
-      MONGODB_NAME: ${{ secrets.MONGODB_NAME }}
+      MONGODB_NAME: ${{ env.MONGODB_NAME }}
 
     steps:
       - uses: actions/checkout@v4

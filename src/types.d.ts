@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb"
 
 export interface Store {
   _id: ObjectId
-  priority: number
+  enabled: boolean
   tracker: string
   state?: State
   listeners: Listener[]

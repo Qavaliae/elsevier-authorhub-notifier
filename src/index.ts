@@ -15,41 +15,39 @@ const main = async () => {
   await client.connect()
   const db = client.db(config.db.name)
 
-  // Retrieve current store
-  const store = await retrieveStore(db)
+  // Retrieve enabled stores
+  const stores = await retrieveStores(db)
 
+  // Process stores
+  for (const store of stores) {
+    await processStore(db, store).catch((e) =>
+      console.error(`${store._id}: error processing store`),
+    )
+  }
+}
+
+// Run processing logic for a specific store
+const processStore = async (db: Db, store: Store): Promise<void> => {
   // Retrieve current state
   const state = await retrieveState(store.tracker)
 
   // If state was updated, notify and persist store with new state
   if (state.LastUpdated !== store.state?.LastUpdated) {
-    console.log('Detected an update to state.')
+    console.log(`${store._id}: detected an update to state`)
 
     store.state = state
     await notify(store)
 
     await persistStore(db, store)
   } else {
-    console.log('State was not updated.')
+    console.log(`${store._id}: state was not updated`)
   }
 }
 
-// Retrieve current store
-const retrieveStore = async (db: Db): Promise<Store> => {
-  const store = (
-    await db
-      .collection('stores')
-      .find()
-      .sort({ priority: 1 })
-      .limit(1)
-      .toArray()
-  )[0]
-
-  if (!store) {
-    throw new Error(`No entry in collection 'stores'.`)
-  }
-
-  return store as unknown as Store
+// Retrieve enabled stores in their current states
+const retrieveStores = async (db: Db): Promise<Store[]> => {
+  const stores = await db.collection('stores').find({ enabled: true }).toArray()
+  return stores as Store[]
 }
 
 // Persist store
