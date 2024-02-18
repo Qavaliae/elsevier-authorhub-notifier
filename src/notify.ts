@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { State, StateSummary, Store } from './types'
+import { ReviewEventName, State, StateSummary, Store } from './types'
 import { config } from './config'
 import { mailer } from './utils/mailer'
 
@@ -65,14 +65,18 @@ export const summarizeState = (state: State): StateSummary => {
   const revision = state.LatestRevisionNumber
   const events = state.ReviewEvents.filter((e) => e.Revision == revision)
 
-  const reviewsCompleted = events.filter((e) => e.Event.includes('COMPLETE'))
+  const reviewsCompleted = events.filter((e) =>
+    e.Event.includes(ReviewEventName.ReviewerCompleted),
+  )
 
-  const invitationsAccepted = events.filter((e) =>
-    e.Event.includes('REVIEWER_ACCEPTED'),
+  const invitationsAccepted = events.filter(
+    (e) =>
+      e.Event.includes(ReviewEventName.ReviewerAccepted) ||
+      e.Event.includes(ReviewEventName.ReviewerAssigned),
   )
 
   const invitationsSent = events.filter((e) =>
-    e.Event.includes('REVIEWER_INVITED'),
+    e.Event.includes(ReviewEventName.ReviewerInvited),
   )
 
   return {

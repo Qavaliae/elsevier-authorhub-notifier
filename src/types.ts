@@ -44,9 +44,16 @@ export interface State {
 
 export interface ReviewEvent {
   Date: number
-  Event: string
+  Event: ReviewEventName
   Revision: number
   Id: number
+}
+
+export enum ReviewEventName {
+  ReviewerCompleted = 'REVIEWER_COMPLETED',
+  ReviewerAssigned = 'REVIEWER_ASSIGNED_NOT_INVITED',
+  ReviewerAccepted = 'REVIEWER_ACCEPTED',
+  ReviewerInvited = 'REVIEWER_INVITED',
 }
 
 export interface StateSummary {
