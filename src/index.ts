@@ -63,7 +63,19 @@ const retrieveState = async (tracker: string): Promise<State> => {
 }
 
 //--------------------------------------------------------------
+// Configure program timeout
+//--------------------------------------------------------------
+
+const timeout = setTimeout(() => {
+  console.error(`program timed out`)
+  process.exit(1)
+}, 90e3)
+
+//--------------------------------------------------------------
 // Run program
 //--------------------------------------------------------------
 
-main().finally(() => client.close())
+main().finally(() => {
+  client.close()
+  clearTimeout(timeout)
+})
